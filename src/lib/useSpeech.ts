@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { PlayingState, createSpeechEngine } from "./speech";
+import { PlayingState, SpeechEngineState, createSpeechEngine } from "./speech";
 
 /*
   @description
@@ -27,10 +27,11 @@ const useSpeech = (sentences: Array<string>) => {
 		console.log("onEnd", e);
 
 		const isSentenceNext = currentSentenceIdx < sentences.length;
+		console.log(currentSentenceIdx, sentences.length);
+		console.log("onEnd there's still sentences left", isSentenceNext);
 		if (isSentenceNext) {
 			const incremenetedIdx = currentSentenceIdx + 1;
 			speechEngine.load(sentences[incremenetedIdx]);
-			// speechEngine.play();
 		}
 	};
 	const onStateUpdate = (state: PlayingState) => {
@@ -40,13 +41,12 @@ const useSpeech = (sentences: Array<string>) => {
 		if (state === "ended") {
 			const isSentenceNext = currentSentenceIdx < sentences.length;
 			console.log(currentSentenceIdx, sentences.length);
+			console.log("onStateUpdate there's still sentences left", isSentenceNext);
 			if (isSentenceNext) {
-				console.log("there's still sentences left", isSentenceNext);
-
 				setCurrentSentenceIdx((prev) => prev + 1);
 				setCurrentWordRange([0, 0]);
 			} else {
-				speechEngine.cancel();
+				setCurrentSentenceIdx(0);
 			}
 		}
 	};
@@ -64,7 +64,26 @@ const useSpeech = (sentences: Array<string>) => {
 	};
 	const pause = () => {
 		speechEngine.pause();
+		setCurrentWordRange([0, 0]);
 	};
+
+	// play opn each ended sentence
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		const isSentenceNext = currentSentenceIdx < sentences.length;
+		console.log(currentSentenceIdx, sentences.length);
+		console.log("useEff there's still sentences left", isSentenceNext);
+		if (playbackState === "ended" && isSentenceNext) {
+			play();
+		} else {
+			speechEngine.cancel();
+		}
+	}, [currentSentenceIdx]);
+
+	// reset sentence index on each laod new content
+	useEffect(() => {
+		setCurrentSentenceIdx(0);
+	}, []);
 
 	return {
 		currentSentenceIdx,
