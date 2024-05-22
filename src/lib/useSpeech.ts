@@ -19,29 +19,20 @@ const useSpeech = (sentences: Array<string>) => {
 	const [playbackState, setPlaybackState] = useState<PlayingState>("paused");
 
 	const onBoundary = (e: SpeechSynthesisEvent) => {
-		console.log("onBoundary", e);
-
 		setCurrentWordRange([e.charIndex, e.charIndex + e.charLength]);
 	};
 	const onEnd = (e: SpeechSynthesisEvent) => {
-		console.log("onEnd", e);
-
 		const isSentenceNext = currentSentenceIdx < sentences.length;
-		console.log(currentSentenceIdx, sentences.length);
-		console.log("onEnd there's still sentences left", isSentenceNext);
 		if (isSentenceNext) {
 			const incremenetedIdx = currentSentenceIdx + 1;
 			speechEngine.load(sentences[incremenetedIdx]);
 		}
 	};
 	const onStateUpdate = (state: PlayingState) => {
-		console.log("onStateUpdate", state);
 		setPlaybackState(state);
 
 		if (state === "ended") {
 			const isSentenceNext = currentSentenceIdx < sentences.length;
-			console.log(currentSentenceIdx, sentences.length);
-			console.log("onStateUpdate there's still sentences left", isSentenceNext);
 			if (isSentenceNext) {
 				setCurrentSentenceIdx((prev) => prev + 1);
 				setCurrentWordRange([0, 0]);
@@ -71,8 +62,6 @@ const useSpeech = (sentences: Array<string>) => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		const isSentenceNext = currentSentenceIdx < sentences.length;
-		console.log(currentSentenceIdx, sentences.length);
-		console.log("useEff there's still sentences left", isSentenceNext);
 		if (playbackState === "ended" && isSentenceNext) {
 			play();
 		} else {

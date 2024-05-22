@@ -12,8 +12,6 @@ function App() {
 		useSpeech(sentences);
 
 	const loadNewContent = useCallback(async () => {
-		console.log("loadNewContent");
-
 		const data = await fetchContent();
 		const parsedData = parseContentIntoSentences(data);
 		setSentences(parsedData);
