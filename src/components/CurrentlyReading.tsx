@@ -30,10 +30,12 @@ export const CurrentlyReading = ({
 	);
 
 	return (
-		<div data-testid="currently-reading">
-			<h2>
+		<div>
+			<h2 data-testid="current-sentence">
 				{currentSentenceStartStr}
-				<span style={{ color: "red" }}>{currentSentenceReadStr}</span>
+				<span style={{ color: "red" }} data-testid="current-word">
+					{currentSentenceReadStr}
+				</span>
 				{currentSentenceEndStr}
 			</h2>
 			<p>{sentencesStr}</p>
