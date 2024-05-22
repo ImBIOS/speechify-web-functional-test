@@ -2,13 +2,11 @@ import "./App.css";
 
 import { Controls } from "./components/Controls";
 import { CurrentlyReading } from "./components/CurrentlyReading";
-import { fetchContent } from "./lib/content";
+import { fetchContent, parseContentIntoSentences } from "./lib/content";
 
 function App() {
 	// const [sentences, setSentences] = useState<Array<string>>([]);
 	// const { currentWord, currentSentence, controls } = useSpeech(sentences);
-
-	fetchContent();
 
 	return (
 		<div className="App">
