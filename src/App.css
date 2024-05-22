@@ -1,0 +1,12 @@
+.currently-reading { 
+
+}
+
+.currently-reading .currently-reading-text { 
+    font-size: 24px;
+}
+
+.currently-reading .currently-reading-text .currentword { 
+    font-size: 24px;
+    color: red;
+}

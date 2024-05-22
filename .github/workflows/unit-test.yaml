@@ -1,0 +1,33 @@
+name: Run unit tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+  checks: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node JS v21
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21.x
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Run unit tests
+        run: npm test
+      - name: Report test results
+        uses: mikepenz/action-junit-report@v2
+        if: success() || failure()
+        with:
+          report_paths: "**/test-results.xml"
