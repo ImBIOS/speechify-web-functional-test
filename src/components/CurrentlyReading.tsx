@@ -8,13 +8,35 @@
  * See example.gif for an example of how the component should look like, feel free to style it however you want as long as the testID exists
  */
 export const CurrentlyReading = ({
-  currentWordRange,
-  currentSentenceIdx,
-  sentences,
+	currentWordRange,
+	currentSentenceIdx,
+	sentences,
 }: {
-  currentWordRange: [number, number];
-  currentSentenceIdx: number;
-  sentences: string[];
+	currentWordRange: [number, number];
+	currentSentenceIdx: number;
+	sentences: string[];
 }) => {
-  return <div data-testid="currently-reading"></div>;
+	const sentencesStr = sentences.join(" ");
+
+	const currentSentenceStr = sentences[currentSentenceIdx] ?? "";
+	const currentSentenceStartStr = currentSentenceStr.slice(
+		0,
+		currentWordRange[0],
+	);
+	const currentSentenceEndStr = currentSentenceStr.slice(currentWordRange[1]);
+	const currentSentenceReadStr = currentSentenceStr.slice(
+		currentWordRange[0],
+		currentWordRange[1],
+	);
+
+	return (
+		<div data-testid="currently-reading">
+			<h2>
+				{currentSentenceStartStr}
+				<span style={{ color: "red" }}>{currentSentenceReadStr}</span>
+				{currentSentenceEndStr}
+			</h2>
+			<p>{sentencesStr}</p>
+		</div>
+	);
 };
