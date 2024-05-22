@@ -26,17 +26,29 @@ const useSpeech = (sentences: Array<string>) => {
 	const onEnd = (e: SpeechSynthesisEvent) => {
 		console.log("onEnd", e);
 
-		if (currentSentenceIdx < sentences.length) {
-			console.log("there's still sentences left");
-
+		const isSentenceNext = currentSentenceIdx < sentences.length;
+		if (isSentenceNext) {
 			const incremenetedIdx = currentSentenceIdx + 1;
-			setCurrentSentenceIdx(incremenetedIdx);
 			speechEngine.load(sentences[incremenetedIdx]);
+			// speechEngine.play();
 		}
 	};
 	const onStateUpdate = (state: PlayingState) => {
 		console.log("onStateUpdate", state);
 		setPlaybackState(state);
+
+		if (state === "ended") {
+			const isSentenceNext = currentSentenceIdx < sentences.length;
+			console.log(currentSentenceIdx, sentences.length);
+			if (isSentenceNext) {
+				console.log("there's still sentences left", isSentenceNext);
+
+				setCurrentSentenceIdx((prev) => prev + 1);
+				setCurrentWordRange([0, 0]);
+			} else {
+				speechEngine.cancel();
+			}
+		}
 	};
 
 	// Init speechEngine
@@ -45,9 +57,9 @@ const useSpeech = (sentences: Array<string>) => {
 		onEnd,
 		onStateUpdate,
 	});
-	speechEngine.load(sentences[currentSentenceIdx]);
 
 	const play = () => {
+		speechEngine.load(sentences[currentSentenceIdx]);
 		speechEngine.play();
 	};
 	const pause = () => {

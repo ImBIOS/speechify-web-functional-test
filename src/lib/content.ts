@@ -26,6 +26,7 @@ const fetchContent = async (url = API_URL): Promise<string> => {
  * Avoid using DOMParser for implementing this function.
  */
 const parseContentIntoSentences = (content: string) => {
+	console.log("parseContentIntoSentences", content);
 	const result = content
 		.replaceAll("<speak>", "")
 		.replaceAll("</speak>", "")

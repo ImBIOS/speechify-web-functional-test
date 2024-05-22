@@ -16,14 +16,14 @@ function App() {
 
 		const data = await fetchContent();
 		const parsedData = parseContentIntoSentences(data);
-		console.log(parsedData);
 		setSentences(parsedData);
 	}, []);
 
 	// Fetch first data
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		loadNewContent();
-	}, [loadNewContent]);
+	}, []);
 
 	return (
 		<div className="App">
