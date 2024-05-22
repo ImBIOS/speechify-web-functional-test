@@ -17,7 +17,7 @@ const fetchContent = async (url = API_URL): Promise<string> => {
 		return response.content;
 	} catch (e) {
 		console.error(e);
-		return e as string;
+		return "<speak><s>There was an error</s></speak>";
 	}
 };
 
